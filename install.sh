@@ -20,6 +20,35 @@ ok()    { printf "${GREEN} ✓${NC}  %s\n" "$*"; }
 warn()  { printf "${YELLOW} ⚠${NC}  %s\n" "$*"; }
 fail()  { printf "${RED} ✗${NC}  %s\n" "$*"; }
 
+# ── Self-Bootstrapping (For fresh Macs) ──────────────────────────
+if [[ ! -d "$HOME/.config/.git" ]]; then
+    info "Dotfiles repository not found at ~/.config"
+    
+    # 1. Ensure git is installed (triggers Xcode CLI tools prompt if missing)
+    if ! xcode-select -p &>/dev/null; then
+        warn "Xcode Command Line Tools are missing."
+        info "Triggering installation..."
+        xcode-select --install
+        fail "Please click 'Install' on the popup window. Once it finishes, run this script again!"
+        exit 1
+    fi
+    
+    # 2. Clone the repository
+    info "Cloning dotfiles repository into ~/.config..."
+    mkdir -p "$HOME/.config"
+    # Ensure it's empty before cloning
+    if [[ "$(ls -A "$HOME/.config")" ]]; then
+        warn "~/.config is not empty. Moving contents to ~/.config.bak"
+        mv "$HOME/.config" "$HOME/.config.bak"
+    fi
+    git clone https://github.com/lohit-dev/.config_for_mac.git "$HOME/.config"
+    
+    # 3. Transfer execution to the cloned repo
+    info "Repository cloned successfully! Launching installer..."
+    cd "$HOME/.config"
+    exec ./install.sh "$@"
+fi
+
 # ── Flags ────────────────────────────────────────────────────────
 SKIP_CASKS=false
 SKIP_RUNTIMES=false
@@ -180,7 +209,7 @@ if [[ "$SKIP_RUNTIMES" == false ]]; then
     # ── NVM (Node Version Manager) ───────────────────────────────
     if [[ ! -d "$HOME/.nvm" ]]; then
         info "Installing NVM..."
-        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
         export NVM_DIR="$HOME/.nvm"
         # shellcheck source=/dev/null
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
@@ -253,10 +282,8 @@ fi
 # ================================================================
 if ! command -v pokemon-colorscripts &>/dev/null; then
     info "Installing pokemon-colorscripts..."
-    POKE_TMP="$(mktemp -d)"
-    git clone https://gitlab.com/phoneybadger/pokemon-colorscripts.git "$POKE_TMP"
-    (cd "$POKE_TMP" && sudo ./install.sh)
-    rm -rf "$POKE_TMP"
+    brew tap phoneybadger/pokemon-colorscripts
+    brew install pokemon-colorscripts
     ok "pokemon-colorscripts installed"
 else
     ok "pokemon-colorscripts already installed"
@@ -290,39 +317,39 @@ if [[ -f "$ZSHENV" ]]; then
         ok "Appended ZDOTDIR to $ZSHENV"
     fi
 else
-    {
-        echo "# ================================================================"
-        echo "# ZSH Configuration Directory"
-        echo "# ================================================================"
-        echo "# This MUST be first — tells zsh where to find .zshrc and other configs"
-        echo "$ZDOTDIR_BLOCK"
-        echo ""
-        echo "# ================================================================"
-        echo "# Environment Variables & PATH"
-        echo "# ================================================================"
-        echo ""
-        echo "# Rust"
-        echo '. "$HOME/.cargo/env"'
-        echo ""
-        echo "# Foundry"
-        echo 'export PATH="$PATH:$HOME/.foundry/bin"'
-        echo ""
-        echo "# Bun"
-        echo 'export BUN_INSTALL="$HOME/.bun"'
-        echo 'export PATH="$BUN_INSTALL/bin:$PATH"'
-        echo ""
-        echo "# Ruby (Homebrew)"
-        echo 'export PATH="/opt/homebrew/opt/ruby/bin:$PATH"'
-        echo 'export PATH="/opt/homebrew/lib/ruby/gems/4.0.0/bin:$PATH"'
-        echo ""
-        echo "# Android"
-        echo 'export ANDROID_HOME="$HOME/Library/Android/sdk"'
-        echo 'export PATH="$PATH:$ANDROID_HOME/emulator"'
-        echo 'export PATH="$PATH:$ANDROID_HOME/platform-tools"'
-        echo ""
-        echo "# Bun completions"
-        echo '[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"'
-    } > "$ZSHENV"
+    cat << 'EOF' > "$ZSHENV"
+# ================================================================
+# ZSH Configuration Directory
+# ================================================================
+# This MUST be first — tells zsh where to find .zshrc and other configs
+export ZDOTDIR="$HOME/.config/zsh"
+
+# ================================================================
+# Environment Variables & PATH
+# ================================================================
+
+# Rust
+. "$HOME/.cargo/env"
+
+# Foundry
+export PATH="$PATH:$HOME/.foundry/bin"
+
+# Bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+# Ruby (Homebrew)
+export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+export PATH="/opt/homebrew/lib/ruby/gems/4.0.0/bin:$PATH"
+
+# Android
+export ANDROID_HOME="$HOME/Library/Android/sdk"
+export PATH="$PATH:$ANDROID_HOME/emulator"
+export PATH="$PATH:$ANDROID_HOME/platform-tools"
+
+# Bun completions
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+EOF
     ok "Created $ZSHENV with ZDOTDIR and PATH setup"
 fi
 
