@@ -15,7 +15,7 @@ A minimal, blazingly fast, and completely automated macOS terminal environment.
 On a completely fresh Mac, just paste this single command into your terminal:
 
 ```bash
-curl -sL https://raw.githubusercontent.com/lohit-dev/.config_for_mac/main/install.sh | bash
+curl -sL https://raw.githubusercontent.com/lohit-dev/.config/main/install.sh | bash
 ```
 
 The script will automatically install Apple Developer Tools (if missing), clone this repository to `~/.config`, and bootstrap your entire environment (Homebrew, GUI Apps, Runtimes, and Shell configurations).

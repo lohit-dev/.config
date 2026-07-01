@@ -41,7 +41,7 @@ if [[ ! -d "$HOME/.config/.git" ]]; then
         warn "~/.config is not empty. Moving contents to ~/.config.bak"
         mv "$HOME/.config" "$HOME/.config.bak"
     fi
-    git clone https://github.com/lohit-dev/.config_for_mac.git "$HOME/.config"
+    git clone --recursive https://github.com/lohit-dev/.config.git "$HOME/.config"
     
     # 3. Transfer execution to the cloned repo
     info "Repository cloned successfully! Launching installer..."
