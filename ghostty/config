@@ -2,9 +2,9 @@ clipboard-read = allow
 clipboard-write = allow
 shell-integration = zsh
 shell-integration-features = sudo,title,no-cursor,ssh-terminfo
-term = xterm-256color
+term = xterm-ghostty
 # theme = Catppuccin Macchiato
-theme = Dracula
+theme = Catppuccin Mocha
 keybind = cmd+s>r=reload_config
 
 # Font configuration
@@ -17,4 +17,6 @@ font-synthetic-style=true
 cursor-style-blink=true
 background-blur=true
 mouse-hide-while-typing = true
-macos-non-native-fullscreen = true
+macos-non-native-fullscreen = false
+
+background-opacity = 0.9

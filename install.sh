@@ -298,7 +298,55 @@ if [[ -f "$SCRIPT_DIR/.gitmodules" ]]; then
 fi
 
 # ================================================================
-# 8. ZDOTDIR → ~/.zshenv
+# 8. AeroSpace config symlink
+# ================================================================
+info "Configuring AeroSpace..."
+
+AEROSPACE_SOURCE="$SCRIPT_DIR/aerospace/aerospace.toml"
+AEROSPACE_TARGET="$HOME/.aerospace.toml"
+
+if [[ -f "$AEROSPACE_SOURCE" ]]; then
+    if [[ -L "$AEROSPACE_TARGET" ]] && [[ "$(readlink "$AEROSPACE_TARGET")" == "$AEROSPACE_SOURCE" ]]; then
+        ok "AeroSpace symlink already points to repo config"
+    else
+        if [[ -e "$AEROSPACE_TARGET" ]] && [[ ! -L "$AEROSPACE_TARGET" ]]; then
+            backup_path="${AEROSPACE_TARGET}.bak.$(date +%Y%m%d%H%M%S)"
+            mv "$AEROSPACE_TARGET" "$backup_path"
+            warn "Moved existing ~/.aerospace.toml to $(basename "$backup_path")"
+        fi
+        ln -sfn "$AEROSPACE_SOURCE" "$AEROSPACE_TARGET"
+        ok "Linked ~/.aerospace.toml -> $AEROSPACE_SOURCE"
+    fi
+else
+    warn "AeroSpace config not found at $AEROSPACE_SOURCE"
+fi
+
+# ================================================================
+# 9. tmux config symlink
+# ================================================================
+info "Configuring tmux..."
+
+TMUX_SOURCE="$SCRIPT_DIR/tmux/tmux.conf"
+TMUX_TARGET="$HOME/.tmux.conf"
+
+if [[ -f "$TMUX_SOURCE" ]]; then
+    if [[ -L "$TMUX_TARGET" ]] && [[ "$(readlink "$TMUX_TARGET")" == "$TMUX_SOURCE" ]]; then
+        ok "tmux symlink already points to repo config"
+    else
+        if [[ -e "$TMUX_TARGET" ]] && [[ ! -L "$TMUX_TARGET" ]]; then
+            backup_path="${TMUX_TARGET}.bak.$(date +%Y%m%d%H%M%S)"
+            mv "$TMUX_TARGET" "$backup_path"
+            warn "Moved existing ~/.tmux.conf to $(basename "$backup_path")"
+        fi
+        ln -sfn "$TMUX_SOURCE" "$TMUX_TARGET"
+        ok "Linked ~/.tmux.conf -> $TMUX_SOURCE"
+    fi
+else
+    warn "tmux config not found at $TMUX_SOURCE"
+fi
+
+# ================================================================
+# 10. ZDOTDIR → ~/.zshenv
 # ================================================================
 info "Configuring ZDOTDIR..."
 
@@ -353,7 +401,7 @@ EOF
 fi
 
 # ================================================================
-# 9. Create zsh cache directory
+# 11. Create zsh cache directory
 # ================================================================
 mkdir -p "$HOME/.cache/zsh/zcompcache"
 ok "Ensured zsh cache directory exists"
