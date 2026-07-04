@@ -9,3 +9,8 @@
 [submodule "zsh"]
 	path = zsh
 	url = https://github.com/lohit-dev/.zsh.git
+	branch = main
+[submodule "lvim"]
+	path = lvim
+	url = https://github.com/lohit-dev/.nvimrc.git
+	branch = main

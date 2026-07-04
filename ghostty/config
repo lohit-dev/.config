@@ -20,3 +20,15 @@ mouse-hide-while-typing = true
 macos-non-native-fullscreen = false
 
 background-opacity = 0.9
+background-blur = 80
+window-padding-x = 10
+
+# Vertical padding
+# Options: Points
+window-padding-y = 10
+
+# Auto-balance padding
+# Options: Boolean
+window-padding-balance = true
+
+window-vsync = true
