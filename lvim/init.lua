@@ -1,4 +1,4 @@
--- Raw Neovim 0.12+ config: native LSP API, native vim.pack, no completion/LSP plugins.
+-- Raw Neovim 0.12+ config: native LSP API and native vim.pack.
 
 vim.loader.enable() -- byte-compile cache for lua modules, faster startup
 
@@ -10,8 +10,8 @@ require "config.diagnostics"
 require "config.keymaps"
 
 -- ---------------------------------------------------------------------------
--- Plugins (vim.pack): colorschemes, treesitter, Telescope, Mason, which-key.
--- LSP itself, diagnostics, and completion stay built-in — zero plugins there.
+-- Plugins (vim.pack): editor tooling, colorschemes, treesitter, Telescope,
+-- Mason, which-key, and task running. LSP and diagnostics stay built-in.
 -- ---------------------------------------------------------------------------
 vim.pack.add {
   { src = "https://github.com/catppuccin/nvim", name = "catppuccin" },
@@ -25,6 +25,13 @@ vim.pack.add {
   { src = "https://github.com/mason-org/mason-lspconfig.nvim" },
   { src = "https://github.com/folke/which-key.nvim" },
   { src = "https://github.com/rafamadriz/friendly-snippets" },
+  { src = "https://github.com/stevearc/overseer.nvim" },
+  { src = "https://github.com/lewis6991/gitsigns.nvim" },
+  { src = "https://github.com/folke/trouble.nvim" },
+  { src = "https://github.com/numToStr/Comment.nvim" },
+  { src = "https://github.com/kdheepak/lazygit.nvim" },
+  { src = "https://github.com/MunifTanjim/nui.nvim" },
+  { src = "https://github.com/kawre/leetcode.nvim" },
 }
 
 require "config.colorscheme"
@@ -35,6 +42,9 @@ require "config.format"
 require "config.telescope"
 require "config.mason"
 require "config.whichkey"
+require "config.overseer"
+require "config.devtools"
+require "config.leetcode"
 
 -- ---------------------------------------------------------------------------
 -- LSP servers
@@ -42,6 +52,9 @@ require "config.whichkey"
 -- for overrides). No nvim-lspconfig required — this is the native 0.11+ mechanism.
 -- ---------------------------------------------------------------------------
 vim.lsp.enable {
+  "lua_ls",
+  "dockerls",
+  "yamlls",
   "gopls",
   "rust_analyzer",
   "tsc",

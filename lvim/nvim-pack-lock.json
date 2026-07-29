@@ -1,12 +1,8 @@
 {
   "plugins": {
-    "blink.cmp": {
-      "rev": "dbcf63b90b358f058637ea370202e3849013383b",
-      "src": "https://github.com/Saghen/blink.cmp"
-    },
-    "blink.lib": {
-      "rev": "2789206e10a0e4880f808c2aaf52bc57d876b481",
-      "src": "https://github.com/Saghen/blink.lib"
+    "Comment.nvim": {
+      "rev": "e30b7f2008e52442154b66f7c519bfd2f1e32acb",
+      "src": "https://github.com/numToStr/Comment.nvim"
     },
     "catppuccin": {
       "rev": "79e2049a0fdf7ec840f8463fe1d962c94493196b",
@@ -24,6 +20,18 @@
       "rev": "6cd7280adead7f586db6fccbd15d2cac7e2188b9",
       "src": "https://github.com/rafamadriz/friendly-snippets"
     },
+    "gitsigns.nvim": {
+      "rev": "31d6fb2d618bca1482b9f274751ead5f03461408",
+      "src": "https://github.com/lewis6991/gitsigns.nvim"
+    },
+    "lazygit.nvim": {
+      "rev": "a04ad0dbc725134edbee3a5eea29290976695357",
+      "src": "https://github.com/kdheepak/lazygit.nvim"
+    },
+    "leetcode.nvim": {
+      "rev": "4e8b3683940a8377379ce9398e7f329e3560b42c",
+      "src": "https://github.com/kawre/leetcode.nvim"
+    },
     "mason-lspconfig.nvim": {
       "rev": "7adc933dabcc7c86ae6b07aff7ee68eac398491f",
       "src": "https://github.com/mason-org/mason-lspconfig.nvim"
@@ -40,6 +48,10 @@
       "rev": "050638170639ceb7bef4e804507cbf209e565b2c",
       "src": "https://github.com/nvim-mini/mini.snippets"
     },
+    "nui.nvim": {
+      "rev": "de740991c12411b663994b2860f1a4fd0937c130",
+      "src": "https://github.com/MunifTanjim/nui.nvim"
+    },
     "nvim-autopairs": {
       "rev": "7b9923abad60b903ece7c52940e1321d39eccc79",
       "src": "https://github.com/windwp/nvim-autopairs"
@@ -47,6 +59,10 @@
     "nvim-treesitter": {
       "rev": "61df84986b4b4ec469ee745a182e433d49f8c27e",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter"
+    },
+    "overseer.nvim": {
+      "rev": "a93d9f6d6defdac4bcd6d2c8ba988650e42e0a0e",
+      "src": "https://github.com/stevearc/overseer.nvim"
     },
     "plenary.nvim": {
       "rev": "74b06c6c75e4eeb3108ec01852001636d85a932b",
@@ -59,6 +75,10 @@
     "telescope.nvim": {
       "rev": "427b576c16792edad01a92b89721d923c19ad60f",
       "src": "https://github.com/nvim-telescope/telescope.nvim"
+    },
+    "trouble.nvim": {
+      "rev": "bd67efe408d4816e25e8491cc5ad4088e708a69a",
+      "src": "https://github.com/folke/trouble.nvim"
     },
     "which-key.nvim": {
       "rev": "3aab2147e74890957785941f0c1ad87d0a44c15a",
