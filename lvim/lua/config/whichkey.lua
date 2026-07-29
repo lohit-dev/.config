@@ -9,6 +9,7 @@ require("which-key").add {
   { "<leader>b", group = "Buffers" },
   { "<leader>o", group = "Tasks" },
   { "<leader>l", group = "LeetCode" },
+  { "<leader>n", group = "Notion" },
   { "<leader>t", group = "Toggle" },
   { "<leader>w", group = "Window" },
 }

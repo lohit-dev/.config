@@ -3,7 +3,7 @@ local opt = vim.opt
 opt.number = true
 opt.relativenumber = true
 opt.signcolumn = "yes"
-opt.cursorline = true
+opt.cursorline = false
 opt.termguicolors = true
 opt.mouse = "a"
 
@@ -12,7 +12,7 @@ opt.shiftwidth = 2
 opt.tabstop = 2
 opt.smartindent = true
 
-opt.cursorlineopt = "both"
+opt.cursorlineopt = "number"
 opt.laststatus = 3
 opt.background = "dark"
 opt.guicursor = ""

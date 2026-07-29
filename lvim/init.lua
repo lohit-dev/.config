@@ -36,6 +36,8 @@ vim.pack.add {
   -- rustaceanvim manages the rust-analyzer client itself (ftplugin/rust.lua);
   -- it must NOT also be started through vim.lsp.enable, see config.rustaceanvim.
   { src = "https://github.com/mrcjkb/rustaceanvim", version = vim.version.range "^9" },
+  { src = "https://github.com/ALT-F4-LLC/notion.nvim" },
+  { src = "https://github.com/zbirenbaum/copilot.lua" },
 }
 
 -- vim.g.rustaceanvim must be set before any rust buffer opens (rustaceanvim
@@ -54,6 +56,8 @@ require "config.overseer"
 require "config.devtools"
 require "config.leetcode"
 require "config.gopher"
+require "config.notion"
+require "config.copilot"
 
 -- ---------------------------------------------------------------------------
 -- LSP servers
