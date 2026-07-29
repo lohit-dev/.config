@@ -32,7 +32,15 @@ vim.pack.add {
   { src = "https://github.com/kdheepak/lazygit.nvim" },
   { src = "https://github.com/MunifTanjim/nui.nvim" },
   { src = "https://github.com/kawre/leetcode.nvim" },
+  { src = "https://github.com/olexsmir/gopher.nvim" },
+  -- rustaceanvim manages the rust-analyzer client itself (ftplugin/rust.lua);
+  -- it must NOT also be started through vim.lsp.enable, see config.rustaceanvim.
+  { src = "https://github.com/mrcjkb/rustaceanvim", version = vim.version.range "^9" },
 }
+
+-- vim.g.rustaceanvim must be set before any rust buffer opens (rustaceanvim
+-- is a ftplugin), so this goes right after vim.pack.add, ahead of everything else.
+require "config.rustaceanvim"
 
 require "config.colorscheme"
 require "config.treesitter"
@@ -45,17 +53,19 @@ require "config.whichkey"
 require "config.overseer"
 require "config.devtools"
 require "config.leetcode"
+require "config.gopher"
 
 -- ---------------------------------------------------------------------------
 -- LSP servers
 -- Each name below is auto-resolved from lsp/<name>.lua (or after/lsp/<name>.lua
 -- for overrides). No nvim-lspconfig required — this is the native 0.11+ mechanism.
+-- rust_analyzer is deliberately absent here: rustaceanvim starts and owns
+-- that client itself (see config.rustaceanvim).
 -- ---------------------------------------------------------------------------
 vim.lsp.enable {
   "lua_ls",
   "dockerls",
   "yamlls",
   "gopls",
-  "rust_analyzer",
   "tsc",
 }

@@ -13,6 +13,24 @@ vim.keymap.set("n", "<leader>u", "g~w", { desc = "Toggle case of word" })
 vim.keymap.set("n", "<leader>w=", "<C-w>=", { desc = "Equalize splits" })
 vim.keymap.set("n", "'", "<cmd>Telescope projects<cr>", { desc = "Project switcher" })
 
+-- Buffers -----------------------------------------------------------------
+local function close_buffers(direction)
+  local current = vim.api.nvim_get_current_buf()
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    local keep = direction == "left" and buf >= current or buf <= current
+    if vim.api.nvim_buf_is_valid(buf) and vim.bo[buf].buflisted and not keep then
+      vim.api.nvim_buf_delete(buf, {})
+    end
+  end
+end
+
+vim.keymap.set("n", "<leader>bl", function()
+  close_buffers "left"
+end, { desc = "Close buffers to the left" })
+vim.keymap.set("n", "<leader>br", function()
+  close_buffers "right"
+end, { desc = "Close buffers to the right" })
+
 -- LSP ---------------------------------------------------------------------
 local lsp_group = vim.api.nvim_create_augroup("lsp-attach", { clear = true })
 
@@ -44,8 +62,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
       vim.lsp.buf.format { async = true }
     end, "Format buffer")
 
-    map("n", "<leader>cd", vim.diagnostic.open_float, "Line diagnostics")
-    map("n", "<leader>ce", function()
+    map("n", "<leader>dn", function()
       vim.diagnostic.jump { count = 1, severity = vim.diagnostic.severity.ERROR, float = true }
     end, "Next error")
 
