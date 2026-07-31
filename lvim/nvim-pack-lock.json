@@ -8,6 +8,10 @@
       "rev": "79e2049a0fdf7ec840f8463fe1d962c94493196b",
       "src": "https://github.com/catppuccin/nvim"
     },
+    "copilot.lua": {
+      "rev": "0f616b9a51cb9e2498834dfd99f6da6966158eba",
+      "src": "https://github.com/zbirenbaum/copilot.lua"
+    },
     "dracula": {
       "rev": "ae752c13e95fb7c5f58da4b5123cb804ea7568ee",
       "src": "https://github.com/Mofiqul/dracula.nvim"
@@ -51,6 +55,10 @@
     "mini.snippets": {
       "rev": "050638170639ceb7bef4e804507cbf209e565b2c",
       "src": "https://github.com/nvim-mini/mini.snippets"
+    },
+    "notion.nvim": {
+      "rev": "86c4862adae62b3cd41516788e5a3b28c5c8cd19",
+      "src": "https://github.com/ALT-F4-LLC/notion.nvim"
     },
     "nui.nvim": {
       "rev": "de740991c12411b663994b2860f1a4fd0937c130",
