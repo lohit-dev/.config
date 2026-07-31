@@ -25,6 +25,9 @@ vim.pack.add {
   { src = "https://github.com/mason-org/mason-lspconfig.nvim" },
   { src = "https://github.com/folke/which-key.nvim" },
   { src = "https://github.com/rafamadriz/friendly-snippets" },
+  -- friendly-snippets is just JSON snippet data -- nvim-snippets is what
+  -- actually reads it and expands it via vim.snippet. See config.snippets.
+  { src = "https://github.com/garymjr/nvim-snippets" },
   { src = "https://github.com/stevearc/overseer.nvim" },
   { src = "https://github.com/lewis6991/gitsigns.nvim" },
   { src = "https://github.com/folke/trouble.nvim" },
@@ -58,6 +61,7 @@ require "config.leetcode"
 require "config.gopher"
 require "config.notion"
 require "config.copilot"
+require "config.snippets"
 
 -- ---------------------------------------------------------------------------
 -- LSP servers
