@@ -33,12 +33,22 @@ opt.swapfile = false
 
 opt.clipboard = "unnamedplus"
 opt.scrolloff = 8
+opt.laststatus = 0
 
 -- Native insert-mode completion (Neovim 0.12+), no completion plugin needed.
 -- Paired with vim.lsp.completion.enable() per-client in keymaps.lua.
-vim.opt.completeopt = {
+opt.completeopt = {
   "menuone",
   "popup",
   "noinsert",
 }
+
 vim.o.autocomplete = true
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(ev)
+    local client = assert(vim.lsp.get_client_by_id(ev.data.client_id))
+    if client:supports_method "textDocument/completion" then
+      vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
+    end
+  end,
+})
