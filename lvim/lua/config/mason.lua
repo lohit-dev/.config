@@ -3,7 +3,15 @@ require("mason").setup() -- also prepends mason's install dir to $PATH
 require("mason-lspconfig").setup {
   -- rust_analyzer still gets its binary installed here, but rustaceanvim
   -- starts the client itself, so it's excluded from automatic_enable below.
-  ensure_installed = { "lua_ls", "dockerls", "yamlls", "gopls", "rust_analyzer" },
+  ensure_installed = {
+    "lua_ls",
+    "dockerls",
+    "yamlls",
+    "jsonls",
+    "taplo",
+    "gopls",
+    "rust_analyzer",
+  },
   automatic_enable = {
     exclude = { "rust_analyzer" },
   },

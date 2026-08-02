@@ -16,6 +16,12 @@ require "config.keymaps"
 vim.pack.add {
   { src = "https://github.com/catppuccin/nvim", name = "catppuccin" },
   { src = "https://github.com/Mofiqul/dracula.nvim", name = "dracula" },
+  { src = "https://github.com/catgoose/nvim-colorizer.lua" },
+  { src = "https://github.com/sainnhe/gruvbox-material" },
+  { src = "https://github.com/rebelot/kanagawa.nvim" },
+  { src = "https://github.com/sainnhe/everforest" },
+  { src = "https://github.com/EdenEast/nightfox.nvim" },
+  { src = "https://github.com/j-hui/fidget.nvim" },
   { src = "https://github.com/windwp/nvim-autopairs" },
   { src = "https://github.com/ahmedkhalf/project.nvim" },
   { src = "https://github.com/nvim-treesitter/nvim-treesitter" },
@@ -28,6 +34,15 @@ vim.pack.add {
   -- friendly-snippets is just JSON snippet data -- nvim-snippets is what
   -- actually reads it and expands it via vim.snippet. See config.snippets.
   { src = "https://github.com/garymjr/nvim-snippets" },
+  { src = "https://github.com/hrsh7th/nvim-cmp" },
+  { src = "https://github.com/hrsh7th/cmp-nvim-lsp" },
+  { src = "https://github.com/hrsh7th/cmp-buffer" },
+  { src = "https://github.com/hrsh7th/cmp-path" },
+  { src = "https://github.com/christoomey/vim-tmux-navigator" },
+  { src = "https://github.com/b0o/SchemaStore.nvim" },
+  { src = "https://github.com/MeanderingProgrammer/render-markdown.nvim" },
+  { src = "https://github.com/sindrets/diffview.nvim" },
+  { src = "https://github.com/axelvc/template-string.nvim" },
   { src = "https://github.com/stevearc/overseer.nvim" },
   { src = "https://github.com/lewis6991/gitsigns.nvim" },
   { src = "https://github.com/folke/trouble.nvim" },
@@ -41,6 +56,12 @@ vim.pack.add {
   { src = "https://github.com/mrcjkb/rustaceanvim", version = vim.version.range "^9" },
   { src = "https://github.com/ALT-F4-LLC/notion.nvim" },
   { src = "https://github.com/zbirenbaum/copilot.lua" },
+  { src = "https://github.com/CopilotC-Nvim/CopilotChat.nvim" },
+  { src = "https://github.com/nvim-tree/nvim-web-devicons" },
+  { src = "https://github.com/stevearc/oil.nvim" },
+  { src = "https://github.com/refractalize/oil-git-status.nvim" },
+  { src = "https://github.com/benomahony/oil-git.nvim" },
+  { src = "https://github.com/JezerM/oil-lsp-diagnostics.nvim" },
 }
 
 -- vim.g.rustaceanvim must be set before any rust buffer opens (rustaceanvim
@@ -48,7 +69,10 @@ vim.pack.add {
 require "config.rustaceanvim"
 
 require "config.colorscheme"
+require "config.colorizer"
+require "config.fidget"
 require "config.treesitter"
+require "config.markdown"
 require "config.project"
 require "config.autopairs"
 require "config.format"
@@ -61,7 +85,10 @@ require "config.leetcode"
 require "config.gopher"
 require "config.notion"
 require "config.copilot"
+require "config.copilot_chat"
 require "config.snippets"
+require "config.completion"
+require "config.oil"
 
 -- ---------------------------------------------------------------------------
 -- LSP servers
@@ -74,6 +101,8 @@ vim.lsp.enable {
   "lua_ls",
   "dockerls",
   "yamlls",
+  "jsonls",
+  "taplo",
   "gopls",
   "tsc",
 }

@@ -1,9 +1,12 @@
 -- General ---------------------------------------------------------------
+local settings = require "config.settings"
+
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<cr>", { desc = "Clear search highlight" })
-vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Window left" })
-vim.keymap.set("n", "<C-j>", "<C-w>j", { desc = "Window down" })
-vim.keymap.set("n", "<C-k>", "<C-w>k", { desc = "Window up" })
-vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Window right" })
+vim.keymap.set("n", "<C-h>", "<cmd><C-U>TmuxNavigateLeft<cr>", { desc = "Navigate left" })
+vim.keymap.set("n", "<C-j>", "<cmd><C-U>TmuxNavigateDown<cr>", { desc = "Navigate down" })
+vim.keymap.set("n", "<C-k>", "<cmd><C-U>TmuxNavigateUp<cr>", { desc = "Navigate up" })
+vim.keymap.set("n", "<C-l>", "<cmd><C-U>TmuxNavigateRight<cr>", { desc = "Navigate right" })
+vim.keymap.set("n", "<C-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>", { desc = "Navigate previous" })
 
 vim.keymap.set("n", ";", ":", { desc = "Enter command mode" }) -- note: shadows ; as f/t repeat
 vim.keymap.set("i", "jj", "<Esc>", { desc = "Exit insert mode" })
@@ -11,7 +14,48 @@ vim.keymap.set({ "n", "i", "v" }, "<C-s>", "<cmd>w<cr>", { desc = "Save file" })
 vim.keymap.set("n", "U", "~h", { desc = "Uppercase first letter of word" })
 vim.keymap.set("n", "<leader>u", "g~w", { desc = "Toggle case of word" })
 vim.keymap.set("n", "<leader>w=", "<C-w>=", { desc = "Equalize splits" })
+vim.keymap.set("n", "<leader>wv", "<cmd>vsplit<cr>", { desc = "Split window vertically" })
+vim.keymap.set("n", "<leader>wh", "<cmd>split<cr>", { desc = "Split window horizontally" })
+vim.keymap.set("n", "<leader>tn", function()
+  local enabled = not settings.get "line_numbers"
+  settings.set("line_numbers", enabled)
+  vim.opt.number = enabled
+  vim.opt.relativenumber = enabled
+end, { desc = "Toggle line numbers" })
 vim.keymap.set("n", "'", "<cmd>Telescope projects<cr>", { desc = "Project switcher" })
+vim.keymap.set("n", "<leader>e", function()
+  require("oil").open()
+end, { desc = "Open file tree" })
+
+local function open_netrw_file(vertical)
+  local file = vim.fn.expand "<cfile>"
+  if file == "" then
+    return
+  end
+  vim.cmd((vertical and "vsplit " or "split ") .. vim.fn.fnameescape(file))
+end
+
+local function configure_file_tree(args)
+  local is_netrw = vim.bo[args.buf].filetype == "netrw"
+  local is_directory = vim.fn.isdirectory(vim.api.nvim_buf_get_name(args.buf)) == 1
+  if not is_netrw and not is_directory then
+    return
+  end
+
+  vim.keymap.set("n", "<C-v>", function()
+    open_netrw_file(true)
+  end, { buffer = args.buf, desc = "Open file in vertical split" })
+  vim.keymap.set("n", "<C-h>", function()
+    open_netrw_file(false)
+  end, { buffer = args.buf, desc = "Open file in horizontal split" })
+end
+
+vim.api.nvim_create_autocmd({ "BufEnter", "FileType" }, {
+  pattern = "*",
+  callback = function(args)
+    configure_file_tree(args)
+  end,
+})
 
 -- Buffers -----------------------------------------------------------------
 local function close_buffers(direction)
@@ -66,16 +110,16 @@ vim.api.nvim_create_autocmd("LspAttach", {
       vim.diagnostic.jump { count = 1, severity = vim.diagnostic.severity.ERROR, float = true }
     end, "Next error")
 
-    if client:supports_method "textDocument/completion" then
-      vim.lsp.completion.enable(true, client.id, buf, { autotrigger = true })
-      map("i", "<C-space>", vim.lsp.completion.get, "Trigger completion")
-    end
-
     if client:supports_method "textDocument/inlayHint" then
-      vim.lsp.inlay_hint.enable(true, { bufnr = buf })
+      vim.lsp.inlay_hint.enable(settings.get "inlay_hints", { bufnr = buf })
       map("n", "<leader>th", function()
-        local enabled = vim.lsp.inlay_hint.is_enabled { bufnr = buf }
-        vim.lsp.inlay_hint.enable(not enabled, { bufnr = buf })
+        local enabled = not settings.get "inlay_hints"
+        settings.set("inlay_hints", enabled)
+        for _, target_buf in ipairs(vim.api.nvim_list_bufs()) do
+          if vim.api.nvim_buf_is_valid(target_buf) and #vim.lsp.get_clients { bufnr = target_buf } > 0 then
+            vim.lsp.inlay_hint.enable(enabled, { bufnr = target_buf })
+          end
+        end
       end, "Toggle inlay hints")
     end
   end,

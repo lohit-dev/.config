@@ -24,12 +24,40 @@ end
 
 local map = vim.keymap.set
 
+local function theme_picker()
+  local actions = require "telescope.actions"
+  local action_state = require "telescope.actions.state"
+  local colorscheme = require "config.colorscheme"
+
+  builtin.colorscheme {
+    enable_preview = true,
+    attach_mappings = function(_, map_picker)
+      map_picker("i", "<CR>", function(prompt_bufnr)
+        local selection = action_state.get_selected_entry()
+        actions.close(prompt_bufnr)
+        if selection then
+          colorscheme.apply(selection.value, true)
+        end
+      end)
+      map_picker("n", "<CR>", function(prompt_bufnr)
+        local selection = action_state.get_selected_entry()
+        actions.close(prompt_bufnr)
+        if selection then
+          colorscheme.apply(selection.value, true)
+        end
+      end)
+      return true
+    end,
+  }
+end
+
 map("n", "<leader>ff", builtin.find_files, { desc = "Find files" })
 map("n", "<leader>fg", builtin.live_grep, { desc = "Live grep" })
 map("n", "<leader>fb", builtin.buffers, { desc = "Buffers" })
 map("n", "<leader>fh", builtin.help_tags, { desc = "Help tags" })
 map("n", "<leader>fd", builtin.diagnostics, { desc = "Diagnostics" })
 map("n", "<leader>fp", "<cmd>Telescope projects<CR>", { desc = "Projects" })
+map("n", "<leader>ft", theme_picker, { desc = "Pick colorscheme" })
 
 map("n", "<leader>cm", git_safe "git_commits", { desc = "Git commits" })
 map("n", "<leader>gt", git_safe "git_status", { desc = "Git status" })
