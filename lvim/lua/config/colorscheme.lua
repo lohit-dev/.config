@@ -5,6 +5,9 @@ local state_file = state_dir .. "/lvim-colorscheme"
 
 require("catppuccin").setup {
   flavour = "mocha",
+
+  transparent_background = true,
+
   integrations = {
     native_lsp = { enabled = true },
     treesitter = true,

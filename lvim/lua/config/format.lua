@@ -1,7 +1,6 @@
 -- Format on save for Go/Rust/TS/JS. Go/Rust use their LSP formatter directly
 -- (gopls/rust-analyzer). TS/JS use Prettier when it's on $PATH: tsc's native
--- LSP (tsgo, "tsc --lsp --stdio") does implement textDocument/formatting, but
--- it's syntax/token-based only -- it'll fix indentation and spacing but won't
+-- LSP (tsgo, "tsc --lsp --stdio") does implement textDocument/formatting, but it's syntax/token-based only -- it'll fix indentation and spacing but won't
 -- reflow lines, wrap args, etc. like Prettier does. That's why it can look
 -- like "nothing happened" on save even though nothing is erroring. Falls back
 -- to the LSP formatter if prettier isn't installed, so no regression either way.
