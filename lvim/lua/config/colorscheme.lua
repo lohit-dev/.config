@@ -1,7 +1,27 @@
 local M = {}
 
-local state_dir = vim.fn.stdpath "state"
-local state_file = state_dir .. "/lvim-colorscheme"
+-- Shared with the zsh side (theme-set / theme.zsh in the .zsh dotfiles repo):
+-- one file, one source of truth for "current theme" across shell and editor.
+-- Neovim only reads this at startup -- picking a theme here or via `theme-set`
+-- in the shell applies to the *next* launch of the other one, not live.
+local state_file = (vim.env.XDG_STATE_HOME or (vim.env.HOME .. "/.local/state")) .. "/current-theme"
+
+-- zsh syntax-theme slug <-> Neovim :colorscheme name. Catppuccin registers a
+-- separate colorscheme per flavour (catppuccin-mocha, catppuccin-macchiato,
+-- ...) so no flavour-switching-at-runtime gymnastics needed here.
+local SLUG_TO_COLORSCHEME = {
+  ["catppuccin-mocha"] = "catppuccin-mocha",
+  ["catppuccin-macchiato"] = "catppuccin-macchiato",
+  dracula = "dracula",
+  gruvbox = "gruvbox",
+  tokyo_night = "tokyonight",
+  cyberpunk = "cyberpunk",
+  nord = "nord",
+}
+local COLORSCHEME_TO_SLUG = {}
+for slug, colorscheme in pairs(SLUG_TO_COLORSCHEME) do
+  COLORSCHEME_TO_SLUG[colorscheme] = slug
+end
 
 require("catppuccin").setup {
   flavour = "mocha",
@@ -17,6 +37,44 @@ require("catppuccin").setup {
 require("dracula").setup {
   transparent_bg = true,
 }
+
+require("kanagawa").setup {
+  transparent = true,
+}
+
+require("nightfox").setup {
+  options = {
+    transparent = true,
+  },
+}
+
+require("gruvbox").setup {
+  transparent_mode = true,
+}
+
+require("tokyonight").setup {
+  transparent = true,
+  styles = {
+    sidebars = "transparent",
+    floats = "transparent",
+  },
+}
+
+require("cyberpunk").setup {
+  transparent = true,
+}
+
+require("nord").setup {
+  transparent = true,
+}
+
+-- gruvbox-material and everforest (sainnhe) are vim-script plugins, configured
+-- via g: variables rather than a Lua setup() call. These must be set before
+-- the `:colorscheme` command runs for that scheme -- setting them once here
+-- at startup covers every future switch too, since they persist for the
+-- whole session regardless of which scheme is currently active.
+vim.g.gruvbox_material_transparent_background = 1
+vim.g.everforest_transparent_background = 1
 
 local function apply_completion_highlights()
   -- Keep the completion menu flat and unobtrusive instead of a dark card.
@@ -35,7 +93,11 @@ local function read_saved_theme()
   if vim.fn.filereadable(state_file) == 1 then
     local saved = vim.fn.readfile(state_file)[1]
     if saved and saved ~= "" then
-      return saved
+      -- Known zsh slug (e.g. "tokyo_night") -> mapped colorscheme name.
+      -- Otherwise assume it's already a raw :colorscheme name (e.g. picked
+      -- via <leader>ft from a scheme with no zsh-side equivalent, like
+      -- kanagawa or nightfox) and try it as-is.
+      return SLUG_TO_COLORSCHEME[saved] or saved
     end
   end
   return "dracula"
@@ -54,8 +116,12 @@ function M.apply(theme, persist)
 
   apply_completion_highlights()
   if persist then
-    vim.fn.mkdir(state_dir, "p")
-    vim.fn.writefile({ theme }, state_file)
+    vim.fn.mkdir(vim.fn.fnamemodify(state_file, ":h"), "p")
+    -- Persist the zsh slug when this colorscheme has one, so the shell side
+    -- can match it on next `source theme.zsh`. Otherwise persist the raw
+    -- colorscheme name -- zsh's theme.zsh falls back to catppuccin-mocha for
+    -- anything it doesn't recognize rather than erroring.
+    vim.fn.writefile({ COLORSCHEME_TO_SLUG[theme] or theme }, state_file)
   end
   return true
 end
@@ -67,7 +133,7 @@ end
 
 -- <leader>ct to flip between the two whenever you want a change of scenery
 vim.keymap.set("n", "<leader>ct", function()
-  M.apply(vim.g.colors_name == "dracula" and "catppuccin" or "dracula", true)
+  M.apply(vim.g.colors_name == "dracula" and "catppuccin-mocha" or "dracula", true)
 end, { desc = "Toggle Catppuccin / Dracula" })
 
 return M

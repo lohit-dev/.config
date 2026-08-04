@@ -52,10 +52,16 @@ local function theme_picker()
 end
 
 map("n", "<leader>ff", builtin.find_files, { desc = "Find files" })
+map("n", "<leader>fa", function()
+  builtin.find_files { hidden = true, no_ignore = true }
+end, { desc = "Find all files" })
 map("n", "<leader>fg", builtin.live_grep, { desc = "Live grep" })
+map("n", "<leader>fw", builtin.live_grep, { desc = "Live grep" })
 map("n", "<leader>fb", builtin.buffers, { desc = "Buffers" })
 map("n", "<leader>fh", builtin.help_tags, { desc = "Help tags" })
 map("n", "<leader>fd", builtin.diagnostics, { desc = "Diagnostics" })
+map("n", "<leader>fo", builtin.oldfiles, { desc = "Recent files" })
+map("n", "<leader>fz", builtin.current_buffer_fuzzy_find, { desc = "Fuzzy find in buffer" })
 map("n", "<leader>fp", "<cmd>Telescope projects<CR>", { desc = "Projects" })
 map("n", "<leader>ft", theme_picker, { desc = "Pick colorscheme" })
 

@@ -16,12 +16,33 @@ vim.keymap.set("n", "<leader>u", "g~w", { desc = "Toggle case of word" })
 vim.keymap.set("n", "<leader>w=", "<C-w>=", { desc = "Equalize splits" })
 vim.keymap.set("n", "<leader>wv", "<cmd>vsplit<cr>", { desc = "Split window vertically" })
 vim.keymap.set("n", "<leader>wh", "<cmd>split<cr>", { desc = "Split window horizontally" })
-vim.keymap.set("n", "<leader>tn", function()
+
+-- NOTE: <leader>h is also the prefix for the Git hunks group (hs/hr/hu/hS/
+-- hR/hp/hb) -- same timeoutlen trade-off as <leader>n above. <leader>v had
+-- no existing prefix, so it's a clean addition.
+vim.keymap.set("n", "<leader>h", function()
+  vim.cmd "split | terminal"
+  vim.cmd "startinsert"
+end, { desc = "Horizontal terminal" })
+vim.keymap.set("n", "<leader>v", function()
+  vim.cmd "vsplit | terminal"
+  vim.cmd "startinsert"
+end, { desc = "Vertical terminal" })
+local function toggle_line_numbers()
   local enabled = not settings.get "line_numbers"
   settings.set("line_numbers", enabled)
   vim.opt.number = enabled
   vim.opt.relativenumber = enabled
-end, { desc = "Toggle line numbers" })
+end
+
+vim.keymap.set("n", "<leader>tn", toggle_line_numbers, { desc = "Toggle line numbers" })
+-- NOTE: <leader>n is also the prefix for the Notion group (nn/nc/nd/nb/ns).
+-- Both a leaf action and a group can share a prefix -- Neovim waits up to
+-- 'timeoutlen' (400ms here) after <leader>n to see if a Notion sub-key
+-- follows before firing this toggle. That means every Notion keymap now has
+-- a ~400ms delay it didn't have before. Flagging this since it's a real
+-- trade-off, not a bug -- let me know if you'd rather this live elsewhere.
+vim.keymap.set("n", "<leader>n", toggle_line_numbers, { desc = "Toggle line numbers" })
 vim.keymap.set("n", "'", "<cmd>Telescope projects<cr>", { desc = "Project switcher" })
 vim.keymap.set("n", "<leader>e", function()
   require("oil").open()
@@ -109,6 +130,22 @@ vim.api.nvim_create_autocmd("LspAttach", {
     map("n", "<leader>dn", function()
       vim.diagnostic.jump { count = 1, severity = vim.diagnostic.severity.ERROR, float = true }
     end, "Next error")
+
+    map("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, "Add workspace folder")
+    map("n", "<leader>wl", function()
+      -- No builtin telescope picker for this -- list_workspace_folders() is
+      -- just a plain string list, so a minimal pickers/finders/sorter picker
+      -- is all it needs.
+      require("telescope.pickers")
+        .new({}, {
+          prompt_title = "LSP Workspace Folders",
+          finder = require("telescope.finders").new_table {
+            results = vim.lsp.buf.list_workspace_folders(),
+          },
+          sorter = require("telescope.config").values.generic_sorter {},
+        })
+        :find()
+    end, "List workspace folders")
 
     if client:supports_method "textDocument/inlayHint" then
       vim.lsp.inlay_hint.enable(settings.get "inlay_hints", { bufnr = buf })
