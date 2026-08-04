@@ -5,6 +5,7 @@ local state_file = state_dir .. "/lvim-settings.json"
 local values = {
   inlay_hints = true,
   line_numbers = true,
+  copilot_enabled = true,
 }
 
 if vim.fn.filereadable(state_file) == 1 then

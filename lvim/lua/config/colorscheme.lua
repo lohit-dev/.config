@@ -134,7 +134,7 @@ end
 
 if applied then
   local source = vim.fn.filereadable(state_file) == 1 and state_file or "default (no state file found)"
-  vim.notify("colorscheme: " .. vim.g.colors_name .. " (from " .. source .. ")", vim.log.levels.INFO)
+  -- vim.notify("colorscheme: " .. vim.g.colors_name .. " (from " .. source .. ")", vim.log.levels.INFO)
 end
 
 return M
