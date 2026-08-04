@@ -127,13 +127,14 @@ function M.apply(theme, persist)
 end
 
 local initial_theme = read_saved_theme()
-if not M.apply(initial_theme, false) and initial_theme ~= "dracula" then
-  M.apply("dracula", false)
+local applied = M.apply(initial_theme, false)
+if not applied and initial_theme ~= "dracula" then
+  applied = M.apply("dracula", false)
 end
 
--- <leader>ct to flip between the two whenever you want a change of scenery
-vim.keymap.set("n", "<leader>ct", function()
-  M.apply(vim.g.colors_name == "dracula" and "catppuccin-mocha" or "dracula", true)
-end, { desc = "Toggle Catppuccin / Dracula" })
+if applied then
+  local source = vim.fn.filereadable(state_file) == 1 and state_file or "default (no state file found)"
+  vim.notify("colorscheme: " .. vim.g.colors_name .. " (from " .. source .. ")", vim.log.levels.INFO)
+end
 
 return M

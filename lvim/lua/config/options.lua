@@ -44,3 +44,5 @@ opt.completeopt = {
 opt.shortmess:append("W")
 opt.ruler = false
 opt.cmdheight = 0
+
+vim.deprecate = function() end

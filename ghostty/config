@@ -4,7 +4,7 @@ shell-integration = zsh
 shell-integration-features = sudo,title,no-cursor,ssh-terminfo
 term = xterm-ghostty
 # theme = Catppuccin Macchiato
-theme = Gruvbox Dark Hard
+theme = Dracula
 keybind = cmd+s>r=reload_config
 
 # Font configuration

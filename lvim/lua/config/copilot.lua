@@ -18,12 +18,12 @@ require("copilot").setup {
   },
 }
 
-vim.keymap.set("n", "<leader>pe", "<cmd>Copilot enable<cr>", { desc = "Enable Copilot" })
-vim.keymap.set("n", "<leader>pd", "<cmd>Copilot disable<cr>", { desc = "Disable Copilot" })
-vim.keymap.set("n", "<leader>ps", "<cmd>Copilot status<cr>", { desc = "Copilot status" })
+vim.keymap.set("n", "<leader>an", "<cmd>Copilot enable<cr>", { desc = "Enable Copilot" })
+vim.keymap.set("n", "<leader>ad", "<cmd>Copilot disable<cr>", { desc = "Disable Copilot" })
+vim.keymap.set("n", "<leader>as", "<cmd>Copilot status<cr>", { desc = "Copilot status" })
 vim.keymap.set(
   "n",
-  "<leader>pt",
+  "<leader>at",
   "<cmd>Copilot suggestion toggle_auto_trigger<cr>",
   { desc = "Toggle Copilot suggestions" }
 )
