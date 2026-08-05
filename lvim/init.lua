@@ -5,7 +5,6 @@ vim.loader.enable() -- byte-compile cache for lua modules, faster startup
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
-require "config.compat"
 require "config.options"
 require "config.diagnostics"
 require "config.keymaps"
@@ -55,14 +54,14 @@ vim.pack.add {
   { src = "https://github.com/numToStr/Comment.nvim" },
   { src = "https://github.com/kdheepak/lazygit.nvim" },
   { src = "https://github.com/MunifTanjim/nui.nvim" },
-  { src = "https://github.com/kawre/leetcode.nvim", load = false },
+  { src = "https://github.com/kawre/leetcode.nvim" },
   { src = "https://github.com/olexsmir/gopher.nvim" },
   -- rustaceanvim manages the rust-analyzer client itself (ftplugin/rust.lua);
   -- it must NOT also be started through vim.lsp.enable, see config.rustaceanvim.
   { src = "https://github.com/mrcjkb/rustaceanvim", version = vim.version.range "^9" },
-  { src = "https://github.com/ALT-F4-LLC/notion.nvim", load = false },
+  { src = "https://github.com/ALT-F4-LLC/notion.nvim" },
   { src = "https://github.com/zbirenbaum/copilot.lua" },
-  { src = "https://github.com/CopilotC-Nvim/CopilotChat.nvim", load = false },
+  { src = "https://github.com/CopilotC-Nvim/CopilotChat.nvim" },
   { src = "https://github.com/nvim-tree/nvim-web-devicons" },
   { src = "https://github.com/stevearc/oil.nvim" },
   { src = "https://github.com/refractalize/oil-git-status.nvim" },

@@ -17,13 +17,14 @@ vim.keymap.set("n", "<leader>w=", "<C-w>=", { desc = "Equalize splits" })
 vim.keymap.set("n", "<leader>wv", "<cmd>vsplit<cr>", { desc = "Split window vertically" })
 vim.keymap.set("n", "<leader>wh", "<cmd>split<cr>", { desc = "Split window horizontally" })
 
--- Moved off bare <leader>h/<leader>v (fought with the Git hunks prefix) into
--- the Toggle group, paired together.
-vim.keymap.set("n", "<leader>th", function()
+-- NOTE: <leader>h is also the prefix for the Git hunks group (hs/hr/hu/hS/
+-- hR/hp/hb) -- same timeoutlen trade-off as <leader>n above. <leader>v had
+-- no existing prefix, so it's a clean addition.
+vim.keymap.set("n", "<leader>h", function()
   vim.cmd "split | terminal"
   vim.cmd "startinsert"
 end, { desc = "Horizontal terminal" })
-vim.keymap.set("n", "<leader>tv", function()
+vim.keymap.set("n", "<leader>v", function()
   vim.cmd "vsplit | terminal"
   vim.cmd "startinsert"
 end, { desc = "Vertical terminal" })
